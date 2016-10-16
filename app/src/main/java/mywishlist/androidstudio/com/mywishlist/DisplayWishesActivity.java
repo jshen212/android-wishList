@@ -2,6 +2,7 @@ package mywishlist.androidstudio.com.mywishlist;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -48,11 +49,13 @@ public class DisplayWishesActivity extends AppCompatActivity {
             String title = wishesFromDB.get(i).getTitle();
             String dateText = wishesFromDB.get(i).getRecordDate();
             String content = wishesFromDB.get(i).getContent();
+            int mid = wishesFromDB.get(i).getItemId();
 
             MyWish myWish = new MyWish();
             myWish.setTitle(title);
             myWish.setContent(content);
             myWish.setRecordDate(dateText);
+            myWish.setItemId(mid);
 
             dbWishes.add(myWish);
         }
@@ -120,6 +123,27 @@ public class DisplayWishesActivity extends AppCompatActivity {
             holder.myWish = getItem(position);
             holder.mTitle.setText(holder.myWish. getTitle());
             holder.mDate.setText(holder.myWish.getRecordDate());
+
+            final ViewHolder finalHolder = holder;
+            holder.mTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String text = finalHolder.myWish.getContent().toString();
+                    String dateText = finalHolder.myWish.getRecordDate().toString();
+                    String title = finalHolder.myWish.getTitle().toString();
+
+                    int mid = finalHolder.myWish.getItemId();
+
+
+                    Intent i = new Intent(DisplayWishesActivity.this, WishDetailActivity.class);
+                    i.putExtra("content", text);
+                    i.putExtra("date", dateText);
+                    i.putExtra("title", title);
+                    i.putExtra("id", mid);
+
+                    startActivity(i);
+                }
+            });
 
             return row;
         }
